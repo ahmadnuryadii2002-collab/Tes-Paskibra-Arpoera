@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tes Paskibraka REAL</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #eceff1;
+    padding: 20px;
+}
+.container {
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+h1 {
+    text-align: center;
+    color: #b71c1c;
+}
+.timer {
+    text-align: center;
+    font-size: 20px;
+    color: #d32f2f;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.question {
+    margin-bottom: 18px;
+}
+.question p {
+    font-weight: bold;
+}
+label {
+    display: block;
+    margin-left: 15px;
+    margin-bottom: 5px;
+}
+button {
+    background: #b71c1c;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+button:hover {
+    background: #7f0000;
+}
+#result {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+.pass { color: green; }
+.fail { color: red; }
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>TES WAWASAN KEBANGSAAN<br>PASKIBRAKA REAL</h1>
+
+<div class="timer">Sisa Waktu: <span id="time">25:00</span></div>
+
+<form id="quiz"></form>
+
+<button onclick="submitTest()">SUBMIT TES</button>
+
+<div id="result"></div>
+</div>
+
+<script>
+const soal = [
+{q:"Pancasila ditetapkan sebagai dasar negara pada tanggal …",o:["1 Juni 1945","17 Agustus 1945","18 Agustus 1945","22 Juni 1945"],a:2},
+{q:"Makna Persatuan Indonesia adalah …",o:["Keseragaman","Persatuan dalam keberagaman","Kebebasan mutlak","Kepentingan golongan"],a:1},
+{q:"Bentuk negara Indonesia menurut UUD 1945 adalah …",o:["Federasi","Serikat","Kesatuan","Konfederasi"],a:2},
+{q:"Tujuan nasional Indonesia tercantum dalam …",o:["Batang tubuh UUD","Pancasila","Pembukaan UUD 1945","TAP MPR"],a:2},
+{q:"Bela negara merupakan kewajiban …",o:["TNI","Polri","Warga negara","Pemerintah"],a:2},
+{q:"Semboyan Bhinneka Tunggal Ika berasal dari kitab …",o:["Negarakertagama","Sutasoma","Pararaton","Arjunawiwaha"],a:1},
+{q:"Sikap Paskibraka yang mencerminkan disiplin adalah …",o:["Datang terlambat","Mengabaikan instruksi","Tepat waktu latihan","Santai saat upacara"],a:2},
+{q:"Dasar hukum bela negara terdapat dalam UUD 1945 Pasal …",o:["27 ayat 1","27 ayat 3","28","30 ayat 1"],a:1},
+{q:"Nasionalisme berarti …",o:["Cinta kelompok","Cinta tanah air","Anti asing","Fanatisme"],a:1},
+{q:"Bendera Merah Putih pertama kali dikibarkan saat …",o:["Sumpah Pemuda","Proklamasi","Sidang BPUPKI","Kongres Pemuda"],a:1},
+{q:"Tugas utama Paskibraka adalah …",o:["Pengamanan","Pengawalan","Pengibaran bendera","Latihan militer"],a:2},
+{q:"Sikap toleransi berarti …",o:["Menghindari perbedaan","Menghargai perbedaan","Menolak perbedaan","Memaksakan kehendak"],a:1},
+{q:"Contoh bela negara di sekolah adalah …",o:["Boloss","Mencontek","Disiplin belajar","Melanggar aturan"],a:2},
+{q:"Persatuan bangsa akan terwujud jika …",o:["Egois","Gotong royong","Diskriminasi","Fanatik"],a:1},
+{q:"Pancasila sebagai ideologi terbuka berarti …",o:["Kaku","Tidak berubah","Menyesuaikan perkembangan","Diganti"],a:2},
+{q:"Upacara bendera bertujuan menumbuhkan …",o:["Malas","Disiplin dan nasionalisme","Takut","Individualisme"],a:1},
+{q:"Rela berkorban berarti …",o:["Mendahulukan diri","Mendahulukan bangsa","Acuh","Egois"],a:1},
+{q:"Wawasan kebangsaan penting untuk …",o:["Perpecahan","Persatuan","Konflik","Fanatisme"],a:1},
+{q:"NKRI merupakan bentuk negara yang …",o:["Terpisah","Bersatu","Longgar","Bebas"],a:1},
+{q:"Sikap yang tidak pantas bagi Paskibraka adalah …",o:["Disiplin","Tanggung jawab","Malas","Patuh"],a:2}
+];
+
+// acak soal
+soal.sort(() => Math.random() - 0.5);
+
+const form = document.getElementById("quiz");
+soal.forEach((s,i)=>{
+    form.innerHTML += `
+    <div class="question">
+    <p>${i+1}. ${s.q}</p>
+    ${s.o.map((opt,j)=>`
+    <label><input type="radio" name="q${i}" value="${j}"> ${opt}</label>`).join("")}
+    </div>`;
+});
+
+// TIMER 25 MENIT
+let time = 25 * 60;
+const timer = setInterval(()=>{
+    let m = Math.floor(time/60);
+    let s = time%60;
+    document.getElementById("time").textContent =
+        `${m}:${s<10?"0":""}${s}`;
+    time--;
+    if(time < 0){
+        clearInterval(timer);
+        submitTest();
+    }
+},1000);
+
+function submitTest(){
+    clearInterval(timer);
+    let score = 0;
+    soal.forEach((s,i)=>{
+        let ans = document.querySelector(`input[name="q${i}"]:checked`);
+        if(ans && Number(ans.value) === s.a) score += 5;
+    });
+
+    let status = score >= 80
+        ? `<span class="pass">LULUS SELEKSI 🇮🇩</span>`
+        : `<span class="fail">TIDAK LULUS</span>`;
+
+    document.getElementById("result").innerHTML =
+        `Nilai Akhir: ${score}/100<br>${status}`;
+}
+</script>
+</body>
+</html>
